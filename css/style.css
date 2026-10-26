@@ -2206,6 +2206,22 @@ body.nav-open .menu-toggle .icon-close {
   transform: rotate(180deg);
 }
 
+.cert-autoplay .cert-play-icon {
+  display: none;
+}
+
+.cert-autoplay.is-paused .cert-play-icon {
+  display: block;
+}
+
+.cert-autoplay.is-paused .cert-pause-icon {
+  display: none;
+}
+
+.cert-autoplay[hidden] {
+  display: none;
+}
+
 .cert-nav:disabled {
   opacity: 0.32;
   cursor: default;

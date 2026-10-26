@@ -228,28 +228,6 @@
       ],
       tags: ["Swift", "Objective-C", "Search", "Media", "Recruitment"],
       metrics: ["8K+ artists", "500+ recruiters", "−30% time-to-hire"]
-    },
-    {
-      id: "spare-to-share",
-      title: "Spare To Share",
-      category: "consumer",
-      categoryLabel: "Consumer",
-      role: "iOS Engineer · Intelegencia",
-      year: "2012",
-      icon: null,
-      monogram: "S2S",
-      link: "https://apps.apple.com/us/app/spare-to-share/id720123726",
-      store: "App Store",
-      summary: "A local sharing app for renting, buying and lending spare items with friends and neighbors.",
-      description: "Built SpareToShare, a community marketplace for sharing, renting and buying everyday items with friends and neighbors, making it easy to list and discover spare things nearby.",
-      highlights: [
-        "Enabled users to share, rent or buy items locally.",
-        "Built listing and discovery flows for spare items.",
-        "Designed for fast, friendly neighborhood exchanges.",
-        "Shipped on the App Store."
-      ],
-      tags: ["Objective-C", "Marketplace", "Community", "Listings", "iOS"],
-      metrics: ["Local sharing", "Peer-to-peer", "Marketplace"]
     }
   ];
 
@@ -437,15 +415,24 @@
   /* Certifications carousel                                                */
   /* --------------------------------------------------------------------- */
 
+  var certSection = document.getElementById("certifications");
+  var certCarousel = document.getElementById("cert-carousel");
   var certTrack = document.getElementById("cert-track");
   var certPrev = document.getElementById("cert-prev");
   var certNext = document.getElementById("cert-next");
+  var certAutoplay = document.getElementById("cert-autoplay");
   var certDots = document.getElementById("cert-dots");
 
   if (certTrack && certPrev && certNext) {
     var certCards = Array.prototype.slice.call(certTrack.querySelectorAll(".cert-card"));
     var certPages = 1;
     var certScrolling = false;
+    var certAutoTimer = null;
+    var certAutoDelay = 5000;
+    var certAutoPaused = false;
+    var certAutoHover = false;
+    var certAutoFocus = false;
+    var certAutoVisible = !("IntersectionObserver" in window);
 
     function certMetrics() {
       var card = certCards[0];
@@ -474,6 +461,53 @@
       certTrack.scrollTo({ left: certTarget(m, clamped), behavior: reduceMotion ? "auto" : "smooth" });
     }
 
+    function certAutoAllowed() {
+      return !reduceMotion && !certAutoPaused && !certAutoHover && !certAutoFocus && !document.hidden && certAutoVisible && certPages > 1;
+    }
+
+    function stopCertAuto() {
+      if (certAutoTimer) {
+        window.clearInterval(certAutoTimer);
+        certAutoTimer = null;
+      }
+    }
+
+    function startCertAuto() {
+      stopCertAuto();
+      if (!certAutoAllowed()) return;
+
+      certAutoTimer = window.setInterval(function () {
+        var m = certMetrics();
+        if (m.pages <= 1) {
+          stopCertAuto();
+          return;
+        }
+        var next = certPageFromScroll(m) + 1;
+        certGoToPage(next >= m.pages ? 0 : next);
+      }, certAutoDelay);
+    }
+
+    function restartCertAuto() {
+      stopCertAuto();
+      startCertAuto();
+    }
+
+    function updateCertAutoUI() {
+      if (!certAutoplay) return;
+      certAutoplay.hidden = reduceMotion || certPages <= 1;
+      certAutoplay.classList.toggle("is-paused", certAutoPaused);
+      certAutoplay.setAttribute("aria-label", certAutoPaused ? "Resume automatic certification scrolling" : "Pause automatic certification scrolling");
+    }
+
+    function refreshCertAuto() {
+      updateCertAutoUI();
+      if (certAutoAllowed()) {
+        startCertAuto();
+      } else {
+        stopCertAuto();
+      }
+    }
+
     function updateCertControls() {
       var m = certMetrics();
       var page = certPageFromScroll(m);
@@ -496,6 +530,7 @@
     function renderCertDots() {
       if (!certDots) {
         updateCertControls();
+        updateCertAutoUI();
         return;
       }
 
@@ -511,22 +546,36 @@
         dot.setAttribute("aria-label", "Go to certification page " + (i + 1) + " of " + m.pages);
         dot.setAttribute("aria-controls", "cert-track");
         dot.addEventListener("click", function (index) {
-          return function () { certGoToPage(index); };
+          return function () {
+            certGoToPage(index);
+            restartCertAuto();
+          };
         }(i));
         certDots.appendChild(dot);
       }
 
       updateCertControls();
+      updateCertAutoUI();
+    }
+
+    if (certAutoplay) {
+      certAutoplay.addEventListener("click", function () {
+        certAutoPaused = !certAutoPaused;
+        if (!certAutoPaused) certAutoFocus = false;
+        refreshCertAuto();
+      });
     }
 
     certPrev.addEventListener("click", function () {
       var m = certMetrics();
       certGoToPage(certPageFromScroll(m) - 1);
+      restartCertAuto();
     });
 
     certNext.addEventListener("click", function () {
       var m = certMetrics();
       certGoToPage(certPageFromScroll(m) + 1);
+      restartCertAuto();
     });
 
     certTrack.addEventListener("keydown", function (event) {
@@ -539,9 +588,11 @@
       } else if (event.key === "Home") {
         event.preventDefault();
         certGoToPage(0);
+        restartCertAuto();
       } else if (event.key === "End") {
         event.preventDefault();
         certGoToPage(certPages - 1);
+        restartCertAuto();
       }
     });
 
@@ -555,15 +606,54 @@
       }
     }, { passive: true });
 
+    if (certSection) {
+      certSection.addEventListener("pointerenter", function () {
+        certAutoHover = true;
+        stopCertAuto();
+      });
+
+      certSection.addEventListener("pointerleave", function () {
+        certAutoHover = false;
+        refreshCertAuto();
+      });
+    }
+
+    document.addEventListener("focusin", function (event) {
+      if (!certSection || !certSection.contains(event.target)) return;
+      if (event.target === certTrack || (event.target.matches && event.target.matches(":focus-visible"))) {
+        certAutoFocus = true;
+        stopCertAuto();
+      }
+    });
+
+    document.addEventListener("focusout", function () {
+      window.setTimeout(function () {
+        certAutoFocus = certSection ? certSection.contains(document.activeElement) : false;
+        if (!certAutoFocus) refreshCertAuto();
+      }, 0);
+    });
+
+    document.addEventListener("visibilitychange", refreshCertAuto);
+
+    if ("IntersectionObserver" in window && certCarousel) {
+      var certVisibilityObserver = new IntersectionObserver(function (entries) {
+        certAutoVisible = entries[0].isIntersecting;
+        refreshCertAuto();
+      }, { threshold: 0.2 });
+      certVisibilityObserver.observe(certCarousel);
+    }
+
     var certResizeTimer = null;
     window.addEventListener("resize", function () {
       window.clearTimeout(certResizeTimer);
       certResizeTimer = window.setTimeout(function () {
         renderCertDots();
+        refreshCertAuto();
       }, 160);
     });
 
     renderCertDots();
+    refreshCertAuto();
   }
 
   /* --------------------------------------------------------------------- */

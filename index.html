@@ -73,6 +73,7 @@
     <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></symbol>
     <symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="4.5"/><path d="m11 12 9-9M16 7l3 3M13 10l3 3"/></symbol>
     <symbol id="i-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4V8Z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5v14M15 5v14"/></symbol>
     <symbol id="i-bluetooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 10 10-5 4V3l5 4L7 17"/></symbol>
     <symbol id="i-gauge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 18a9 9 0 1 1 15 0"/><path d="m12 13 4-4"/><circle cx="12" cy="14" r="1.5"/></symbol>
     <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 5.5a3 3 0 0 1 0 5.8M17.5 14.5c2 .5 3.5 2.4 3.5 4.5"/></symbol>
@@ -117,8 +118,8 @@
           <svg class="icon icon-sun" aria-hidden="true"><use href="#i-sun"/></svg>
           <svg class="icon icon-moon" aria-hidden="true"><use href="#i-moon"/></svg>
         </button>
-        <a class="btn btn-ghost btn-sm header-resume" href="assets/resume/Prabhat_Pankaj_Resume_iOS.pdf" download aria-label="Download Prabhat's résumé (PDF, 2 pages)">
-          <span>Résumé</span>
+        <a class="btn btn-ghost btn-sm header-resume" href="assets/resume/Prabhat_Pankaj_Resume_iOS.pdf" download aria-label="Download Prabhat's resume (PDF, 2 pages)">
+          <span>Resume</span>
           <svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>
         </a>
         <button class="icon-btn menu-toggle" id="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">
@@ -160,7 +161,7 @@
               <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
             </a>
             <a class="btn btn-ghost" href="assets/resume/Prabhat_Pankaj_Resume_iOS.pdf" download>
-              Download résumé
+              Download resume
               <svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>
             </a>
           </div>
@@ -453,7 +454,7 @@
           <button class="filter-btn" type="button" data-filter="healthcare" aria-pressed="false">Healthcare</button>
           <button class="filter-btn" type="button" data-filter="ott" aria-pressed="false">OTT &amp; DRM</button>
           <button class="filter-btn" type="button" data-filter="consumer" aria-pressed="false">Consumer</button>
-          <span class="filter-count" id="filter-count" aria-live="polite">7 projects</span>
+          <span class="filter-count" id="filter-count" aria-live="polite">6 projects</span>
         </div>
 
         <div class="project-grid" id="project-grid">
@@ -467,7 +468,6 @@
                 <li><a href="https://apps.apple.com/us/app/playvcastv/id1224878381">Verimatrix PlayVCASTV</a></li>
                 <li><a href="https://apps.apple.com/in/app/talentrack/id1021596860">Talentrack</a></li>
                 <li><a href="https://apps.apple.com/us/app/verizon-cloud/id645682444">Verizon Cloud</a></li>
-                <li><a href="https://apps.apple.com/us/app/spare-to-share/id720123726">Spare To Share</a></li>
               </ul>
             </div>
           </noscript>
@@ -687,6 +687,10 @@
             <p class="section-lead">Seven LinkedIn Learning certifications from September 2023 — covering iOS architecture, security, concurrency, IoT and on-device machine learning.</p>
           </div>
           <div class="cert-controls">
+            <button class="icon-btn cert-nav cert-autoplay" id="cert-autoplay" type="button" aria-label="Pause automatic certification scrolling" aria-controls="cert-track">
+              <svg class="icon cert-play-icon" aria-hidden="true"><use href="#i-play"/></svg>
+              <svg class="icon cert-pause-icon" aria-hidden="true"><use href="#i-pause"/></svg>
+            </button>
             <button class="icon-btn cert-nav" id="cert-prev" type="button" aria-label="Previous certifications" aria-controls="cert-track">
               <svg class="icon cert-nav-prev" aria-hidden="true"><use href="#i-arrow"/></svg>
             </button>
@@ -852,9 +856,9 @@
             </ul>
           </div>
 
-          <aside class="contact-side" aria-label="Résumé">
+          <aside class="contact-side" aria-label="Resume">
             <p class="contact-side-title">Prefer the formal version?</p>
-            <p class="contact-side-copy">Download my latest résumé — two pages, tuned for senior iOS roles.</p>
+            <p class="contact-side-copy">Download my latest resume — two pages, tuned for senior iOS roles.</p>
             <a class="resume-link" href="assets/resume/Prabhat_Pankaj_Resume_iOS.pdf" download>
               <span class="resume-icon"><svg class="icon" aria-hidden="true"><use href="#i-apple"/></svg></span>
               <span>
