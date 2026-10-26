@@ -71,6 +71,7 @@
     <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12 5 5L20 6"/></symbol>
     <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5M3 17.5l9 5 9-5"/></symbol>
     <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="4.5"/><path d="m11 12 9-9M16 7l3 3M13 10l3 3"/></symbol>
     <symbol id="i-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4V8Z"/></symbol>
     <symbol id="i-bluetooth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 10 10-5 4V3l5 4L7 17"/></symbol>
     <symbol id="i-gauge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 18a9 9 0 1 1 15 0"/><path d="m12 13 4-4"/><circle cx="12" cy="14" r="1.5"/></symbol>
@@ -99,7 +100,7 @@
     <div class="container header-inner">
       <a class="brand" href="#top" aria-label="Prabhat Pankaj — back to top">
         <span class="brand-mark">PP</span>
-        <span class="brand-name">prabhat<span class="brand-dot">.</span></span>
+        <span class="brand-name">Prabhat Pankaj</span>
       </a>
 
       <nav class="primary-nav" id="primary-nav" aria-label="Primary">
@@ -116,7 +117,7 @@
           <svg class="icon icon-sun" aria-hidden="true"><use href="#i-sun"/></svg>
           <svg class="icon icon-moon" aria-hidden="true"><use href="#i-moon"/></svg>
         </button>
-        <a class="btn btn-ghost btn-sm header-resume" href="assets/resume/Prabhat_Pankaj_Resume_iOS.pdf" download>
+        <a class="btn btn-ghost btn-sm header-resume" href="assets/resume/Prabhat_Pankaj_Resume_iOS.pdf" download aria-label="Download Prabhat's résumé (PDF, 2 pages)">
           <span>Résumé</span>
           <svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>
         </a>
@@ -442,7 +443,7 @@
           <div>
             <p class="eyebrow"><span>03</span> Selected work</p>
             <h2 id="projects-title">Apps people <span class="gradient-text">rely on.</span></h2>
-            <p class="section-lead">Banking, healthcare and media products shipped to the App Store — with the outcomes that mattered.</p>
+            <p class="section-lead">Banking, healthcare, streaming and consumer products shipped to the App Store — with the outcomes that mattered.</p>
           </div>
         </header>
 
@@ -464,8 +465,9 @@
                 <li><a href="https://apps.apple.com/in/app/ei-business/id6762098534">EI Business</a></li>
                 <li><a href="https://apps.apple.com/gb/app/biomedix-xchange/id1636691707">Biomedix Xchange</a></li>
                 <li><a href="https://apps.apple.com/us/app/playvcastv/id1224878381">Verimatrix PlayVCASTV</a></li>
-                <li><a href="https://apps.apple.com/us/app/verizon-cloud/id645682444">Verizon Cloud</a></li>
                 <li><a href="https://apps.apple.com/in/app/talentrack/id1021596860">Talentrack</a></li>
+                <li><a href="https://apps.apple.com/us/app/verizon-cloud/id645682444">Verizon Cloud</a></li>
+                <li><a href="https://apps.apple.com/us/app/spare-to-share/id720123726">Spare To Share</a></li>
               </ul>
             </div>
           </noscript>
@@ -676,11 +678,132 @@
       </div>
     </section>
 
-    <section class="section" id="contact" aria-labelledby="contact-title">
+    <section class="section" id="certifications" aria-labelledby="certifications-title">
+      <div class="container">
+        <header class="section-head section-head-row" data-reveal>
+          <div>
+            <p class="eyebrow"><span>07</span> Certifications</p>
+            <h2 id="certifications-title">Learning that <span class="gradient-text">compounds.</span></h2>
+            <p class="section-lead">Seven LinkedIn Learning certifications from September 2023 — covering iOS architecture, security, concurrency, IoT and on-device machine learning.</p>
+          </div>
+          <div class="cert-controls">
+            <button class="icon-btn cert-nav" id="cert-prev" type="button" aria-label="Previous certifications" aria-controls="cert-track">
+              <svg class="icon cert-nav-prev" aria-hidden="true"><use href="#i-arrow"/></svg>
+            </button>
+            <button class="icon-btn cert-nav" id="cert-next" type="button" aria-label="Next certifications" aria-controls="cert-track">
+              <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
+            </button>
+          </div>
+        </header>
+
+        <div class="cert-carousel" id="cert-carousel" role="region" aria-roledescription="carousel" aria-label="LinkedIn Learning certifications" data-reveal>
+          <ul class="cert-track" id="cert-track" tabindex="0" aria-label="LinkedIn Learning certification cards">
+            <li class="cert-card">
+              <div class="cert-top">
+                <span class="cert-mark" aria-hidden="true"><svg class="icon"><use href="#i-key"/></svg></span>
+                <span class="cert-issuer"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"/></svg> LinkedIn Learning</span>
+              </div>
+              <p class="cert-date">Issued Sep 2023</p>
+              <h3>Advanced iOS Development: Keychain Access</h3>
+              <p class="cert-copy">Secure credential storage, access control and Keychain patterns for sensitive app data.</p>
+              <a class="cert-link" href="https://www.linkedin.com/learning/certificates/608950c3745e121b9fb0e1ec407c9a414d83a6954d9c5d1895df536cfb9b6d52" target="_blank" rel="noopener noreferrer" aria-label="Verify Advanced iOS Development: Keychain Access on LinkedIn Learning">
+                Verify credential
+                <svg class="icon" aria-hidden="true"><use href="#i-external"/></svg>
+              </a>
+            </li>
+            <li class="cert-card">
+              <div class="cert-top">
+                <span class="cert-mark" aria-hidden="true"><svg class="icon"><use href="#i-layers"/></svg></span>
+                <span class="cert-issuer"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"/></svg> LinkedIn Learning</span>
+              </div>
+              <p class="cert-date">Issued Sep 2023</p>
+              <h3>iOS App Development: Design Patterns for Mobile Architecture</h3>
+              <p class="cert-copy">Mobile architecture patterns for maintainable, testable iOS applications.</p>
+              <a class="cert-link" href="https://www.linkedin.com/learning/certificates/a252d5ba744b12e25301471b67b08d652bc0595219e416b4757d5f645bf1b7cc" target="_blank" rel="noopener noreferrer" aria-label="Verify iOS App Development: Design Patterns for Mobile Architecture on LinkedIn Learning">
+                Verify credential
+                <svg class="icon" aria-hidden="true"><use href="#i-external"/></svg>
+              </a>
+            </li>
+            <li class="cert-card">
+              <div class="cert-top">
+                <span class="cert-mark" aria-hidden="true"><svg class="icon"><use href="#i-code"/></svg></span>
+                <span class="cert-issuer"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"/></svg> LinkedIn Learning</span>
+              </div>
+              <p class="cert-date">Issued Sep 2023</p>
+              <h3>iOS Development: Architecture</h3>
+              <p class="cert-copy">Separating presentation, business logic and data for apps that scale.</p>
+              <a class="cert-link" href="https://www.linkedin.com/learning/certificates/62139a459bc117bb687d8669c6edb8032e087897c609d0a7b903fd9d2a35e18b" target="_blank" rel="noopener noreferrer" aria-label="Verify iOS Development: Architecture on LinkedIn Learning">
+                Verify credential
+                <svg class="icon" aria-hidden="true"><use href="#i-external"/></svg>
+              </a>
+            </li>
+            <li class="cert-card">
+              <div class="cert-top">
+                <span class="cert-mark" aria-hidden="true"><svg class="icon"><use href="#i-shield"/></svg></span>
+                <span class="cert-issuer"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"/></svg> LinkedIn Learning</span>
+              </div>
+              <p class="cert-date">Issued Sep 2023</p>
+              <h3>iOS Development: Security</h3>
+              <p class="cert-copy">Threat-aware iOS development, secure storage and data protection.</p>
+              <a class="cert-link" href="https://www.linkedin.com/learning/certificates/2229c0df95a8ef9ae76f965c3cf72972897166f20a29a024db35e7dc2133bc1e" target="_blank" rel="noopener noreferrer" aria-label="Verify iOS Development: Security on LinkedIn Learning">
+                Verify credential
+                <svg class="icon" aria-hidden="true"><use href="#i-external"/></svg>
+              </a>
+            </li>
+            <li class="cert-card">
+              <div class="cert-top">
+                <span class="cert-mark" aria-hidden="true"><svg class="icon"><use href="#i-gauge"/></svg></span>
+                <span class="cert-issuer"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"/></svg> LinkedIn Learning</span>
+              </div>
+              <p class="cert-date">Issued Sep 2023</p>
+              <h3>iOS Development: Threading and Grand Central Dispatch</h3>
+              <p class="cert-copy">Concurrency, queues and responsive UI work with Grand Central Dispatch.</p>
+              <a class="cert-link" href="https://www.linkedin.com/learning/certificates/77ba5b590f9437d7e62452ad3a3ea7b8817ad9facba5719f14ef5896f96ecf28" target="_blank" rel="noopener noreferrer" aria-label="Verify iOS Development: Threading and Grand Central Dispatch on LinkedIn Learning">
+                Verify credential
+                <svg class="icon" aria-hidden="true"><use href="#i-external"/></svg>
+              </a>
+            </li>
+            <li class="cert-card">
+              <div class="cert-top">
+                <span class="cert-mark" aria-hidden="true"><svg class="icon"><use href="#i-bluetooth"/></svg></span>
+                <span class="cert-issuer"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"/></svg> LinkedIn Learning</span>
+              </div>
+              <p class="cert-date">Issued Sep 2023</p>
+              <h3>IoT Foundations: Fundamentals</h3>
+              <p class="cert-copy">Connected-device fundamentals, sensor data and IoT architecture.</p>
+              <a class="cert-link" href="https://www.linkedin.com/learning/certificates/457f6f64df0913713970de828a2c7db599a2b5bc38bdfea2a31a92dc38c0f56e" target="_blank" rel="noopener noreferrer" aria-label="Verify IoT Foundations: Fundamentals on LinkedIn Learning">
+                Verify credential
+                <svg class="icon" aria-hidden="true"><use href="#i-external"/></svg>
+              </a>
+            </li>
+            <li class="cert-card">
+              <div class="cert-top">
+                <span class="cert-mark" aria-hidden="true"><svg class="icon"><use href="#i-spark"/></svg></span>
+                <span class="cert-issuer"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"/></svg> LinkedIn Learning</span>
+              </div>
+              <p class="cert-date">Issued Sep 2023</p>
+              <h3>Machine Learning for iOS: Core ML and Create ML</h3>
+              <p class="cert-copy">Building and shipping on-device models with Core ML and Create ML.</p>
+              <a class="cert-link" href="https://www.linkedin.com/learning/certificates/9bb5f3cc3b97a0280ea198f288f292ac756d986763047a8f2b6d99cae1bc20d1" target="_blank" rel="noopener noreferrer" aria-label="Verify Machine Learning for iOS: Core ML and Create ML on LinkedIn Learning">
+                Verify credential
+                <svg class="icon" aria-hidden="true"><use href="#i-external"/></svg>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="cert-footer" data-reveal>
+          <div class="cert-dots" id="cert-dots" role="group" aria-label="Certification carousel pages"></div>
+          <p class="cert-note">Verified LinkedIn Learning credentials · Sep 2023</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="contact" aria-labelledby="contact-title">
       <div class="container">
         <div class="contact-card" data-reveal>
           <div class="contact-copy">
-            <p class="eyebrow"><span>07</span> Contact</p>
+            <p class="eyebrow"><span>08</span> Contact</p>
             <h2 id="contact-title">Let's build something <span class="gradient-text">worth shipping.</span></h2>
             <p class="section-lead">I'm open to senior iOS roles and interesting product collaborations. Tell me what you're building — I'll reply within a day.</p>
 
@@ -729,22 +852,14 @@
             </ul>
           </div>
 
-          <aside class="contact-side" aria-label="Résumés">
+          <aside class="contact-side" aria-label="Résumé">
             <p class="contact-side-title">Prefer the formal version?</p>
-            <p class="contact-side-copy">Download a résumé tuned for the role you have in mind.</p>
+            <p class="contact-side-copy">Download my latest résumé — two pages, tuned for senior iOS roles.</p>
             <a class="resume-link" href="assets/resume/Prabhat_Pankaj_Resume_iOS.pdf" download>
               <span class="resume-icon"><svg class="icon" aria-hidden="true"><use href="#i-apple"/></svg></span>
               <span>
                 <strong>Senior iOS Engineer</strong>
-                <small>PDF · one page</small>
-              </span>
-              <svg class="icon resume-arrow" aria-hidden="true"><use href="#i-download"/></svg>
-            </a>
-            <a class="resume-link" href="assets/resume/Prabhat_Pankaj_Resume_LeadDeveloper.pdf" download>
-              <span class="resume-icon"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg></span>
-              <span>
-                <strong>Lead Developer</strong>
-                <small>PDF · detailed</small>
+                <small>PDF · 2 pages</small>
               </span>
               <svg class="icon resume-arrow" aria-hidden="true"><use href="#i-download"/></svg>
             </a>
@@ -757,9 +872,9 @@
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <a class="brand footer-brand" href="#top" aria-label="Back to top">
+      <a class="brand footer-brand" href="#top" aria-label="Prabhat Pankaj — back to top">
         <span class="brand-mark">PP</span>
-        <span class="brand-name">prabhat<span class="brand-dot">.</span></span>
+        <span class="brand-name">Prabhat Pankaj</span>
       </a>
       <p class="footer-copy">© <span id="year">2026</span> Prabhat Pankaj. Built with care, Swift-level attention to detail.</p>
       <div class="footer-links">

@@ -98,29 +98,6 @@
 
   var projects = [
     {
-      id: "emirates-nbd",
-      title: "Emirates NBD Mobile Banking",
-      category: "fintech",
-      categoryLabel: "FinTech",
-      role: "Senior Software Engineer · Sep 2025 — Present",
-      year: "2025 — Now",
-      icon: null,
-      monogram: "NBD",
-      link: "https://www.emiratesnbd.com/en/",
-      store: "Website",
-      summary: "Leading end-to-end development of Emirates NBD's flagship iOS banking app — secure features, modular architecture and a SwiftUI-first roadmap.",
-      description: "As the iOS lead on Emirates NBD's consumer banking app, I own delivery of secure, customer-facing features for a high-traffic FinTech platform. The work spans modular SwiftUI architecture, async/await data flows, encryption, secure session management and modernization of legacy Objective-C modules.",
-      highlights: [
-        "Design modular, testable architecture with Swift, SwiftUI and Combine.",
-        "Implement async/await across networking and data flows to improve responsiveness and readability.",
-        "Strengthen data security and compliance with advanced encryption and secure session management.",
-        "Lead migration of legacy Objective-C modules to Swift and SwiftUI.",
-        "Optimize memory, battery and launch performance for a seamless banking experience."
-      ],
-      tags: ["Swift", "SwiftUI", "Combine", "Objective-C", "Security", "Async/await"],
-      metrics: ["High-traffic FinTech", "Modular architecture", "SwiftUI-first", "99% stability"]
-    },
-    {
       id: "enbd-business",
       title: "ENBD Business",
       category: "fintech",
@@ -251,6 +228,28 @@
       ],
       tags: ["Swift", "Objective-C", "Search", "Media", "Recruitment"],
       metrics: ["8K+ artists", "500+ recruiters", "−30% time-to-hire"]
+    },
+    {
+      id: "spare-to-share",
+      title: "Spare To Share",
+      category: "consumer",
+      categoryLabel: "Consumer",
+      role: "iOS Engineer · Intelegencia",
+      year: "2012",
+      icon: null,
+      monogram: "S2S",
+      link: "https://apps.apple.com/us/app/spare-to-share/id720123726",
+      store: "App Store",
+      summary: "A local sharing app for renting, buying and lending spare items with friends and neighbors.",
+      description: "Built SpareToShare, a community marketplace for sharing, renting and buying everyday items with friends and neighbors, making it easy to list and discover spare things nearby.",
+      highlights: [
+        "Enabled users to share, rent or buy items locally.",
+        "Built listing and discovery flows for spare items.",
+        "Designed for fast, friendly neighborhood exchanges.",
+        "Shipped on the App Store."
+      ],
+      tags: ["Objective-C", "Marketplace", "Community", "Listings", "iOS"],
+      metrics: ["Local sharing", "Peer-to-peer", "Marketplace"]
     }
   ];
 
@@ -269,14 +268,18 @@
       ? '<img class="project-icon" src="' + project.icon + '" alt="" width="68" height="68" loading="lazy">'
       : '<span class="project-mono">' + project.monogram + "</span>";
 
+    var storeMarkup = project.link
+      ? '<a class="project-store" href="' + project.link + '" target="_blank" rel="noopener noreferrer" aria-label="Open ' + project.title + " on " + project.store + '">' +
+          icon(storeIcons[project.store] || "external") +
+          "<span>" + project.store + "</span>" +
+        "</a>"
+      : "";
+
     return (
       '<article class="project-card" data-category="' + project.category + '" data-project="' + project.id + '" data-reveal style="--reveal-delay:' + ((index % 3) * 70) + 'ms">' +
         '<div class="project-cover cover-' + project.category + '">' +
           '<span class="project-badge">' + project.categoryLabel + "</span>" +
-          '<a class="project-store" href="' + project.link + '" target="_blank" rel="noopener noreferrer" aria-label="Open ' + project.title + " on " + project.store + '">' +
-            icon(storeIcons[project.store] || "external") +
-            "<span>" + project.store + "</span>" +
-          "</a>" +
+          storeMarkup +
           iconMarkup +
         "</div>" +
         '<div class="project-body">' +
@@ -387,9 +390,11 @@
     }).join("");
 
     dialogLinks.innerHTML =
-      '<a class="btn btn-primary btn-sm" href="' + project.link + '" target="_blank" rel="noopener noreferrer">' +
-        "Open " + project.store + " " + icon("external") +
-      "</a>" +
+      (project.link
+        ? '<a class="btn btn-primary btn-sm" href="' + project.link + '" target="_blank" rel="noopener noreferrer">' +
+            "Open " + project.store + " " + icon("external") +
+          "</a>"
+        : "") +
       '<button class="btn btn-ghost btn-sm" type="button" data-close-dialog>Close ' + icon("close") + "</button>";
 
     if (typeof dialog.showModal === "function") {
@@ -426,6 +431,139 @@
         lastFocused.focus();
       }
     });
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* Certifications carousel                                                */
+  /* --------------------------------------------------------------------- */
+
+  var certTrack = document.getElementById("cert-track");
+  var certPrev = document.getElementById("cert-prev");
+  var certNext = document.getElementById("cert-next");
+  var certDots = document.getElementById("cert-dots");
+
+  if (certTrack && certPrev && certNext) {
+    var certCards = Array.prototype.slice.call(certTrack.querySelectorAll(".cert-card"));
+    var certPages = 1;
+    var certScrolling = false;
+
+    function certMetrics() {
+      var card = certCards[0];
+      var styles = window.getComputedStyle(certTrack);
+      var gap = parseFloat(styles.columnGap || styles.gap) || 0;
+      var step = card ? card.getBoundingClientRect().width + gap : 0;
+      var max = Math.max(0, certTrack.scrollWidth - certTrack.clientWidth);
+      var visible = step > 0 ? Math.max(1, Math.floor((certTrack.clientWidth + gap) / step)) : 1;
+      var pages = Math.max(1, Math.ceil(certCards.length / visible));
+      return { gap: gap, step: step, max: max, visible: visible, pages: pages };
+    }
+
+    function certPageFromScroll(m) {
+      if (!m || m.max <= 0 || m.pages <= 1) return 0;
+      return Math.round((certTrack.scrollLeft / m.max) * (m.pages - 1));
+    }
+
+    function certTarget(m, page) {
+      if (m.max <= 0 || m.pages <= 1) return 0;
+      return (page / (m.pages - 1)) * m.max;
+    }
+
+    function certGoToPage(page) {
+      var m = certMetrics();
+      var clamped = Math.max(0, Math.min(page, m.pages - 1));
+      certTrack.scrollTo({ left: certTarget(m, clamped), behavior: reduceMotion ? "auto" : "smooth" });
+    }
+
+    function updateCertControls() {
+      var m = certMetrics();
+      var page = certPageFromScroll(m);
+      certPages = m.pages;
+
+      certPrev.disabled = m.max <= 0 || page <= 0;
+      certNext.disabled = m.max <= 0 || page >= m.pages - 1;
+
+      if (certDots) {
+        Array.prototype.slice.call(certDots.children).forEach(function (dot, index) {
+          if (index === page) {
+            dot.setAttribute("aria-current", "true");
+          } else {
+            dot.removeAttribute("aria-current");
+          }
+        });
+      }
+    }
+
+    function renderCertDots() {
+      if (!certDots) {
+        updateCertControls();
+        return;
+      }
+
+      var m = certMetrics();
+      certPages = m.pages;
+      certDots.innerHTML = "";
+      certDots.classList.toggle("is-empty", m.pages <= 1);
+
+      for (var i = 0; i < m.pages; i += 1) {
+        var dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = "cert-dot";
+        dot.setAttribute("aria-label", "Go to certification page " + (i + 1) + " of " + m.pages);
+        dot.setAttribute("aria-controls", "cert-track");
+        dot.addEventListener("click", function (index) {
+          return function () { certGoToPage(index); };
+        }(i));
+        certDots.appendChild(dot);
+      }
+
+      updateCertControls();
+    }
+
+    certPrev.addEventListener("click", function () {
+      var m = certMetrics();
+      certGoToPage(certPageFromScroll(m) - 1);
+    });
+
+    certNext.addEventListener("click", function () {
+      var m = certMetrics();
+      certGoToPage(certPageFromScroll(m) + 1);
+    });
+
+    certTrack.addEventListener("keydown", function (event) {
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        certNext.click();
+      } else if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        certPrev.click();
+      } else if (event.key === "Home") {
+        event.preventDefault();
+        certGoToPage(0);
+      } else if (event.key === "End") {
+        event.preventDefault();
+        certGoToPage(certPages - 1);
+      }
+    });
+
+    certTrack.addEventListener("scroll", function () {
+      if (!certScrolling) {
+        window.requestAnimationFrame(function () {
+          updateCertControls();
+          certScrolling = false;
+        });
+        certScrolling = true;
+      }
+    }, { passive: true });
+
+    var certResizeTimer = null;
+    window.addEventListener("resize", function () {
+      window.clearTimeout(certResizeTimer);
+      certResizeTimer = window.setTimeout(function () {
+        renderCertDots();
+      }, 160);
+    });
+
+    renderCertDots();
   }
 
   /* --------------------------------------------------------------------- */
