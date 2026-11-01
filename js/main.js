@@ -19,7 +19,7 @@
   function applyTheme(theme, persist) {
     root.dataset.theme = theme;
     if (themeMeta) {
-      themeMeta.setAttribute("content", theme === "dark" ? "#06080f" : "#f5f7fc");
+      themeMeta.setAttribute("content", theme === "dark" ? "#04060b" : "#eef2f9");
     }
     if (themeToggle) {
       themeToggle.setAttribute("aria-label", theme === "dark" ? "Switch to light theme" : "Switch to dark theme");
@@ -47,6 +47,28 @@
   var menuToggle = document.getElementById("menu-toggle");
   var nav = document.getElementById("primary-nav");
   var navLinks = Array.prototype.slice.call(document.querySelectorAll(".nav-link"));
+  var navIndicator = null;
+
+  if (nav) {
+    navIndicator = document.createElement("span");
+    navIndicator.className = "nav-indicator";
+    navIndicator.setAttribute("aria-hidden", "true");
+    nav.appendChild(navIndicator);
+  }
+
+  function positionNavIndicator() {
+    if (!navIndicator || !nav) return;
+    var active = nav.querySelector(".nav-link.is-active");
+    if (!active || window.innerWidth <= 960) {
+      navIndicator.classList.remove("is-visible");
+      return;
+    }
+    var navRect = nav.getBoundingClientRect();
+    var rect = active.getBoundingClientRect();
+    navIndicator.style.width = rect.width + "px";
+    navIndicator.style.transform = "translate3d(" + (rect.left - navRect.left) + "px, 0, 0)";
+    navIndicator.classList.add("is-visible");
+  }
 
   function closeMenu() {
     document.body.classList.remove("nav-open");
@@ -234,6 +256,28 @@
   var projectGrid = document.getElementById("project-grid");
   var filterButtons = Array.prototype.slice.call(document.querySelectorAll(".filter-btn"));
   var filterCount = document.getElementById("filter-count");
+  var filterBar = document.querySelector(".filter-bar");
+  var filterIndicator = null;
+
+  if (filterBar) {
+    filterIndicator = document.createElement("span");
+    filterIndicator.className = "filter-indicator";
+    filterIndicator.setAttribute("aria-hidden", "true");
+    filterBar.appendChild(filterIndicator);
+  }
+
+  function positionFilterIndicator() {
+    if (!filterIndicator || !filterBar) return;
+    var active = filterBar.querySelector(".filter-btn.is-active");
+    if (!active) {
+      filterIndicator.classList.remove("is-visible");
+      return;
+    }
+    filterIndicator.style.width = active.offsetWidth + "px";
+    filterIndicator.style.height = active.offsetHeight + "px";
+    filterIndicator.style.transform = "translate3d(" + active.offsetLeft + "px, " + active.offsetTop + "px, 0)";
+    filterIndicator.classList.add("is-visible");
+  }
 
   var storeIcons = {
     "App Store": "apple",
@@ -317,6 +361,8 @@
       button.classList.toggle("is-active", active);
       button.setAttribute("aria-pressed", active ? "true" : "false");
     });
+
+    positionFilterIndicator();
   }
 
   filterButtons.forEach(function (button) {
@@ -324,6 +370,8 @@
       updateFilter(button.getAttribute("data-filter"));
     });
   });
+
+  positionFilterIndicator();
 
   /* --------------------------------------------------------------------- */
   /* Project dialog                                                         */
@@ -814,26 +862,179 @@
   if (scene && finePointer && !reduceMotion) {
     var portrait = scene.querySelector(".portrait-card");
     var glow = scene.querySelector(".portrait-glow");
+    var chips = [
+      { el: scene.querySelector(".chip-swift"), depth: 16 },
+      { el: scene.querySelector(".chip-swiftui"), depth: 24 },
+      { el: scene.querySelector(".chip-drm"), depth: 12 }
+    ];
+    var sceneFrame = null;
+
+    scene.addEventListener("pointerenter", function () {
+      sceneFrame = scene.getBoundingClientRect();
+    });
 
     scene.addEventListener("pointermove", function (event) {
-      var rect = scene.getBoundingClientRect();
+      if (!sceneFrame) sceneFrame = scene.getBoundingClientRect();
+      var rect = sceneFrame;
       var x = (event.clientX - rect.left) / rect.width;
       var y = (event.clientY - rect.top) / rect.height;
-      var rotateY = (x - 0.5) * 9;
-      var rotateX = (0.5 - y) * 7;
+      var rotateY = (x - 0.5) * 11;
+      var rotateX = (0.5 - y) * 9;
 
       if (portrait) {
-        portrait.style.transform = "perspective(1000px) rotateX(" + rotateX.toFixed(2) + "deg) rotateY(" + rotateY.toFixed(2) + "deg) translateY(-2px)";
+        portrait.style.setProperty("--rx", rotateX.toFixed(2) + "deg");
+        portrait.style.setProperty("--ry", rotateY.toFixed(2) + "deg");
+        portrait.style.setProperty("--spot-x", (x * 100).toFixed(1) + "%");
+        portrait.style.setProperty("--spot-y", (y * 100).toFixed(1) + "%");
       }
       if (glow) {
-        glow.style.transform = "translate(" + ((x - 0.5) * 18).toFixed(1) + "px, " + ((y - 0.5) * 18).toFixed(1) + "px)";
+        glow.style.transform = "translate3d(" + ((x - 0.5) * 22).toFixed(1) + "px, " + ((y - 0.5) * 22).toFixed(1) + "px, 0)";
       }
+      chips.forEach(function (chip) {
+        if (!chip.el) return;
+        chip.el.style.setProperty("--chip-x", ((x - 0.5) * chip.depth).toFixed(1) + "px");
+        chip.el.style.setProperty("--chip-y", ((y - 0.5) * chip.depth).toFixed(1) + "px");
+      });
     });
 
     scene.addEventListener("pointerleave", function () {
-      if (portrait) portrait.style.transform = "";
+      sceneFrame = null;
+      if (portrait) {
+        portrait.style.setProperty("--rx", "0deg");
+        portrait.style.setProperty("--ry", "0deg");
+      }
       if (glow) glow.style.transform = "";
+      chips.forEach(function (chip) {
+        if (!chip.el) return;
+        chip.el.style.setProperty("--chip-x", "0px");
+        chip.el.style.setProperty("--chip-y", "0px");
+      });
     });
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* 3D / liquid-glass interactions                                         */
+  /* --------------------------------------------------------------------- */
+
+  var glassSelector = [
+    ".about-facts",
+    ".value-card",
+    ".timeline-card",
+    ".repo-card",
+    ".core-skills",
+    ".skill-card",
+    ".credential-card",
+    ".cert-card",
+    ".project-card",
+    ".filter-bar",
+    ".contact-card",
+    ".hero-stat",
+    ".github-panel"
+  ].join(",");
+
+  var tiltSelector = [
+    ".about-facts",
+    ".value-card",
+    ".timeline-card",
+    ".repo-card",
+    ".skill-card",
+    ".credential-card",
+    ".project-card"
+  ].join(",");
+
+  var glassCards = Array.prototype.slice.call(document.querySelectorAll(glassSelector));
+  var tiltCards = finePointer && !reduceMotion
+    ? Array.prototype.slice.call(document.querySelectorAll(tiltSelector))
+    : [];
+
+  tiltCards.forEach(function (card) {
+    card.classList.add("tilt-card");
+  });
+
+  if (finePointer && !reduceMotion) {
+    glassCards.forEach(function (card) {
+      card.addEventListener("pointermove", function (event) {
+        var rect = card.getBoundingClientRect();
+        var px = (event.clientX - rect.left) / rect.width;
+        var py = (event.clientY - rect.top) / rect.height;
+
+        card.style.setProperty("--spot-x", (px * 100).toFixed(2) + "%");
+        card.style.setProperty("--spot-y", (py * 100).toFixed(2) + "%");
+
+        if (card.classList.contains("tilt-card")) {
+          card.style.setProperty("--card-ry", ((px - 0.5) * 7).toFixed(2) + "deg");
+          card.style.setProperty("--card-rx", ((0.5 - py) * 5.5).toFixed(2) + "deg");
+        }
+      });
+
+      card.addEventListener("pointerleave", function () {
+        if (card.classList.contains("tilt-card")) {
+          card.style.setProperty("--card-rx", "0deg");
+          card.style.setProperty("--card-ry", "0deg");
+        }
+      });
+    });
+
+    var magneticTargets = Array.prototype.slice.call(document.querySelectorAll(".btn, .social-link, .icon-btn, .back-to-top"));
+    magneticTargets.forEach(function (target) {
+      target.classList.add("is-magnetic");
+      target.addEventListener("pointermove", function (event) {
+        var rect = target.getBoundingClientRect();
+        var mx = (event.clientX - rect.left) / rect.width - 0.5;
+        var my = (event.clientY - rect.top) / rect.height - 0.5;
+        target.style.translate = (mx * 8).toFixed(2) + "px " + (my * 6).toFixed(2) + "px";
+      });
+      target.addEventListener("pointerleave", function () {
+        target.style.translate = "";
+      });
+    });
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* Ambient pointer light                                                  */
+  /* --------------------------------------------------------------------- */
+
+  if (finePointer && !reduceMotion) {
+    var pointerFrame = null;
+    var pointerX = 50;
+    var pointerY = 16;
+
+    function paintPointerLight() {
+      root.style.setProperty("--pointer-x", pointerX.toFixed(2) + "%");
+      root.style.setProperty("--pointer-y", pointerY.toFixed(2) + "%");
+      pointerFrame = null;
+    }
+
+    document.addEventListener("pointermove", function (event) {
+      pointerX = (event.clientX / window.innerWidth) * 100;
+      pointerY = (event.clientY / window.innerHeight) * 100;
+      if (!pointerFrame) pointerFrame = window.requestAnimationFrame(paintPointerLight);
+    }, { passive: true });
+
+    document.addEventListener("pointerleave", function () {
+      pointerX = 50;
+      pointerY = 16;
+      if (!pointerFrame) pointerFrame = window.requestAnimationFrame(paintPointerLight);
+    });
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* Indicator refresh                                                      */
+  /* --------------------------------------------------------------------- */
+
+  function refreshIndicators() {
+    positionNavIndicator();
+    positionFilterIndicator();
+  }
+
+  var indicatorResizeTimer = null;
+  window.addEventListener("resize", function () {
+    window.clearTimeout(indicatorResizeTimer);
+    indicatorResizeTimer = window.setTimeout(refreshIndicators, 140);
+  });
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(refreshIndicators);
   }
 
   /* --------------------------------------------------------------------- */
@@ -900,15 +1101,25 @@
   var header = document.querySelector(".site-header");
   var backToTop = document.getElementById("back-to-top");
   var sections = Array.prototype.slice.call(document.querySelectorAll("main section[id]"));
+  var aurora = document.querySelector(".bg-aurora");
 
   function onScroll() {
     var y = window.pageYOffset || document.documentElement.scrollTop;
     var max = document.documentElement.scrollHeight - window.innerHeight;
     var percent = max > 0 ? (y / max) * 100 : 0;
 
-    if (progressBar) progressBar.style.width = percent + "%";
+    if (progressBar) {
+      progressBar.style.width = percent + "%";
+      progressBar.classList.toggle("is-active", percent > 0.2);
+    }
     if (header) header.classList.toggle("is-scrolled", y > 8);
-    if (backToTop) backToTop.classList.toggle("is-visible", y > 720);
+    if (backToTop) {
+      backToTop.classList.toggle("is-visible", y > 720);
+      backToTop.style.setProperty("--scroll-angle", (percent * 3.6).toFixed(1) + "deg");
+    }
+    if (aurora && !reduceMotion) {
+      aurora.style.transform = "translate3d(0, " + Math.min(y * 0.035, 46).toFixed(1) + "px, 0)";
+    }
 
     var activeId = "";
     sections.forEach(function (section) {
@@ -926,6 +1137,8 @@
         link.removeAttribute("aria-current");
       }
     });
+
+    positionNavIndicator();
   }
 
   var ticking = false;
